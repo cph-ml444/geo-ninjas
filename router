@@ -1,23 +1,31 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import GMap from '@/components/home/GMap'
-import Signup from '@/components/auth/Signup'
-import Login from '@/components/auth/Login'
-import ViewProfile from '@/components/profile/ViewProfile'
+import Index from '@/components/Index'
+import AddProduct from '@/components/AddProduct'
+import EditProduct from '@/components/EditProduct'
+import Signup from '@/components/Signup'
+import Login from '@/components/Login'
+import Userinfo from '@/components/Userinfo'
 import firebase from 'firebase'
 
 Vue.use(Router)
 
 const router = new Router({
-  mode: 'history',
   routes: [
     {
       path: '/',
-      name:  'GMap',
-      component: GMap,
-      meta: {
-        requiresAuth: true
-      }
+      name: 'Index',
+      component: Index,
+    },
+    {
+      path: '/add-product',
+      name: 'AddProduct',
+      component: AddProduct,
+    },
+    {
+      path: '/edit-product/:product_slug',
+      name: 'EditProduct',
+      component: EditProduct,
     },
     {
       path: '/signup',
@@ -30,15 +38,13 @@ const router = new Router({
       component: Login
     },
     {
-      path: '/profile/:id',
-      name: 'ViewProfile',
-      component: ViewProfile,
-      meta: {
-        requiresAuth: true
-      }
+      path: '/users',
+      name: 'Userinfo',
+      component: Userinfo,
     }
   ]
 })
+
 router.beforeEach((to, from, next) => {
   if(to.matched.some(rec => rec.meta.requiresAuth)) {
     let user = firebase.auth().currentUser
