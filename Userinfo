@@ -1,0 +1,45 @@
+<template>
+<div class="profile container">
+    <h2 class="deep-purple-text center">Your information</h2>
+        <div v-if="users" class="card">
+            <div class="card-content">
+                <ul class="info">
+                    <li>
+                        <p>{{ users.name }}</p>
+                    </li>
+                    <li>
+                        <p>{{ users.address }}</p>
+                    </li>
+                    <li>
+                        <p>{{ users.zip }}</p>
+                    </li>
+                    <li>
+                        <p>{{ users.phone }}</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+import db from '@/firebase/init'
+import firebase from 'firebase'
+export default {
+ data(){
+     return{
+        users: []
+     }
+ },
+ created(){
+    let user = firebase.auth().currentUser 
+    db.firestore().collection('users').where('user_id', '==', user.uid).get()
+    .then(snapshot => {
+        let usersArray = [];
+        snapshot.forEach((doc) => {
+             usersArray.push(doc.data());
+        })
+        this.users = usersArray;
+      })
+ }
+}
+</script>
